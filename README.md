@@ -1,6 +1,6 @@
 <h1 align="center"> OBSERVA </h1>
 <p align="center"> <img src=.pics/loki.png width=50 height=50> <img src=.pics/alertmanager.png width=50 height=50> <img src=.pics/prometheus.png width=50 height=50> <img src=.pics/grafana.png width=50 height=50> </p> 
-Out of the box Kubernetes monitoring stack consisting of Prometheus,Grafana,Promtail,Loki,Alertmanager and packed as a Helm chart. Just deploy and observe!
+Out of the box repeatable Kubernetes monitoring stack consisting of Prometheus,Grafana,Promtail,Loki,Alertmanager and packed as a Helm chart. Just deploy and observe!
 
 \
 _The project was developed for personal use and is still under development. Maybe this is not perfect solution, but it does its job and may inspire you to make something greater!_
