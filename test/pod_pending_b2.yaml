@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: b2
+spec:
+  containers:
+    - name: b2
+      image: alpine
+  restartPolicy: Always
+  nodeSelector:
+    disktype: fairy

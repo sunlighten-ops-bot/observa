@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: a2
+spec:
+  containers:
+    - name: a2
+      image: alpine
+  restartPolicy: Always

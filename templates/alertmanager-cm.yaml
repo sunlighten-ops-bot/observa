@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alertmanager
+  namespace: observa
+  labels:
+    app: alertmanager
+data:
+{{ range $path, $bytes := .Files.Glob "alertmanager/*" }}
+  {{ base $path }}: |
+{{ $.Files.Get $path | indent 4}}
+{{ end }}

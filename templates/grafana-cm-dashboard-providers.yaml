@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-providers
+  namespace: observa
+  labels:
+    app: grafana
+data:
+  dashboardproviders.yaml: |
+    apiVersion: 1
+    providers:
+    - name: default
+      type: file
+      disableDeletion: false
+      editable: true
+      allowUiUpdates: true
+      folder: ""
+      options:
+        path: /var/lib/grafana/dashboards

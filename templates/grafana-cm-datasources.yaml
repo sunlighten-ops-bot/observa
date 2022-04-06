@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: observa
+  labels:
+    app: grafana
+data:
+  loki.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: loki
+      type: loki
+      access: proxy
+      url: http://loki:3100
+      uid: observa-loki
+      isDefault: false
+      version: 1
+    - name: prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus:9090
+      uid: observa-prometheus
+      isDefault: false
+      version: 1

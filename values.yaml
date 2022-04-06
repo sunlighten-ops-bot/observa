@@ -1,0 +1,48 @@
+alertmanager:
+  image: prom/alertmanager
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+  storage: 1Gi
+  
+promtail:
+  image: grafana/promtail:main
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+
+loki:
+  image: grafana/loki:main
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+  storage: 10Gi
+
+prometheus:
+  image: prom/prometheus:main
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+  storage: 10Gi
+  retentionTime: 14d
+  retentionSize: 8GB
+
+node_exporter:
+  image: prom/node-exporter
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+
+grafana:
+  host: observa.az
+  image: grafana/grafana:main
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+  storage: 10Gi

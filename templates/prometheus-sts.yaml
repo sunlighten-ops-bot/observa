@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: prometheus
+  namespace: observa
+  labels:
+    app: prometheus
+spec:
+  podManagementPolicy: OrderedReady
+  serviceName: prometheus
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: {{ .Values.prometheus.image }}
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yaml"
+            - "--storage.tsdb.path=/data"
+            - "--storage.tsdb.retention.time={{ .Values.prometheus.retentionTime }}"
+            - "--storage.tsdb.retention.size={{ .Values.prometheus.retentionSize }}"
+          ports:
+            - containerPort: 9090
+          resources:
+            requests:
+              cpu: {{ .Values.prometheus.cpuReq }}
+              memory: {{ .Values.prometheus.memReq }}
+            limits:
+              cpu: {{ .Values.prometheus.cpuLim }}
+              memory: {{ .Values.prometheus.memLim }}
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9090
+            initialDelaySeconds: 30
+            timeoutSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /-/healthy
+              port: 9090
+            initialDelaySeconds: 30
+            timeoutSeconds: 30
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus/
+            - name: data
+              mountPath: /data/
+            - name: timezone
+              mountPath: /etc/localtime
+      serviceAccountName: prometheus
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 70
+      volumes:
+      - name: config
+        configMap:
+          name: prometheus
+      - name: timezone
+        hostPath:
+          path: /etc/localtime
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: {{ .Values.prometheus.storage }}
