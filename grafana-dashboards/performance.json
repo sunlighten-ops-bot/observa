@@ -25,7 +25,7 @@
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
   "id": 2,
-  "iteration": 1649164682684,
+  "iteration": 1649423097870,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -758,6 +758,30 @@
                 "value": "decbytes"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "writes"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "reads"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "decbytes"
+              }
+            ]
           }
         ]
       },
@@ -814,9 +838,37 @@
           "interval": "",
           "legendFormat": "",
           "refId": "Memory"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "exemplar": false,
+          "expr": "sum by(pod,namespace,container,instance)(rate(container_fs_writes_bytes_total{container!=\"\"}[1m]))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Writes"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "exemplar": false,
+          "expr": "sum by(pod,namespace,container,instance)(rate(container_fs_reads_bytes_total{container!=\"\"}[1m]))",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "interval": "",
+          "legendFormat": "",
+          "refId": "Reads"
         }
       ],
-      "title": "Pod performance",
+      "title": "Container performance",
       "transformations": [
         {
           "id": "merge",
@@ -842,6 +894,8 @@
               "Value #B": "Memory",
               "Value #CPU": "cpu",
               "Value #Memory": "memory",
+              "Value #Reads": "reads",
+              "Value #Writes": "writes",
               "container": "container",
               "namespace": "namespace",
               "pod": "pod"
@@ -1341,9 +1395,10 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "prometheus",
@@ -1368,9 +1423,10 @@
       {
         "allValue": ".*",
         "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
+          "isNone": true,
+          "selected": false,
+          "text": "None",
+          "value": ""
         },
         "datasource": {
           "type": "prometheus",
@@ -1402,6 +1458,6 @@
   "timezone": "browser",
   "title": "Performance",
   "uid": "observa-dashboard-performance",
-  "version": 134,
+  "version": 138,
   "weekStart": ""
 }

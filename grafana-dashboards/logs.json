@@ -227,9 +227,9 @@
     "list": [
       {
         "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
+          "selected": false,
+          "text": "",
+          "value": ""
         },
         "datasource": {
           "type": "loki",
@@ -250,9 +250,9 @@
       },
       {
         "current": {
-          "selected": true,
-          "text": "default",
-          "value": "default"
+          "selected": false,
+          "text": "",
+          "value": ""
         },
         "datasource": {
           "type": "loki",
