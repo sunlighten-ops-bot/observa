@@ -17,7 +17,12 @@ spec:
     metadata:
       labels:
         app: prometheus
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/prometheus-cm.yaml") . | sha256sum }}
     spec:
+      serviceAccountName: prometheus
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 70
       containers:
         - name: prometheus
           image: {{ .Values.prometheus.image }}
@@ -54,9 +59,6 @@ spec:
               mountPath: /data/
             - name: timezone
               mountPath: /etc/localtime
-      serviceAccountName: prometheus
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 70
       volumes:
       - name: config
         configMap:
@@ -64,12 +66,11 @@ spec:
       - name: timezone
         hostPath:
           path: /etc/localtime
-  updateStrategy:
-    type: OnDelete
   volumeClaimTemplates:
   - metadata:
       name: data
     spec:
+      storageClassName: {{ .Values.prometheus.storageClassName }}
       accessModes:
       - ReadWriteOnce
       resources:

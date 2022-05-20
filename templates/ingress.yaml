@@ -10,13 +10,13 @@ metadata:
     nginx.ingress.kubernetes.io/enable-access-log: "false"
 spec:
   rules:
-  - host: {{ .Values.grafana.host }}
-    http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: grafana
-            port:
-              number: 3000
+    - host: {{ .Values.grafana.host }}
+      http:
+        paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: grafana
+              port:
+                number: 3000

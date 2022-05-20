@@ -17,7 +17,13 @@ spec:
     metadata:
       labels:
         app: grafana
+      annotations:
+        checksum/configDashboardProviders: {{ include (print $.Template.BasePath "/grafana-cm-dashboard-providers.yaml") . | sha256sum }}
+        checksum/configDatasources: {{ include (print $.Template.BasePath "/grafana-cm-datasources.yaml") . | sha256sum }}
+        checksum/configDashboards: {{ include (print $.Template.BasePath "/grafana-cm-dashboards.yaml") . | sha256sum }}
     spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 70
       containers:
         - name: grafana
           image: {{ .Values.grafana.image }}
@@ -65,8 +71,6 @@ spec:
               name: grafana-dashboards
             - name: timezone
               mountPath: /etc/localtime
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 70
       volumes:
       - name: grafana-datasources
         configMap:
@@ -80,12 +84,11 @@ spec:
       - name: timezone
         hostPath:
           path: /etc/localtime
-  updateStrategy:
-    type: OnDelete
   volumeClaimTemplates:
   - metadata:
       name: data
     spec:
+      storageClassName: {{ .Values.grafana.storageClassName }}
       accessModes:
       - ReadWriteOnce
       resources:

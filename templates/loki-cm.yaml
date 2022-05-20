@@ -15,7 +15,7 @@ data:
 
     ingester:
       lifecycler:
-        address: 127.0.0.1
+        address: 0.0.0.0
         ring:
           kvstore:
             store: inmemory
@@ -37,6 +37,14 @@ data:
       address: 0.0.0.0
       max_outstanding_per_tenant: 2048
 
+    compactor:
+      working_directory: /loki/retention
+      shared_store: filesystem
+      compaction_interval: 5m
+      retention_enabled: true
+      retention_delete_delay: 1h
+      retention_delete_worker_count: 100
+
     schema_config:
       configs:
       - from: 2022-01-01
@@ -50,11 +58,11 @@ data:
     storage_config:
       boltdb:
         directory: /loki/index
-
       filesystem:
         directory: /loki/chunks
 
     limits_config:
       enforce_metric_name: false
+      retention_period: {{ .Values.loki.retentionTime }}
       reject_old_samples: true
       reject_old_samples_max_age: 24h

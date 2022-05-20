@@ -1,0 +1,540 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "id": 3,
+  "iteration": 1650267363236,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "observa-prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "blue",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.* probe duration/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "purple",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance)(probe_dns_lookup_time_seconds{job=\"kubernetes-ingresses\",instance=~\"$Endpoint\"})",
+          "hide": false,
+          "legendFormat": "{{instance}} DNS lookup time",
+          "range": true,
+          "refId": "DNS Lookup time"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance)(probe_duration_seconds{job=\"kubernetes-ingresses\",instance=~\"$Endpoint\"})",
+          "hide": false,
+          "legendFormat": "{{instance}} probe duration",
+          "range": true,
+          "refId": "Probe duration"
+        }
+      ],
+      "title": "$Endpoint probe duration",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "observa-prometheus"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "green",
+            "mode": "fixed"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "left",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 600,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byRegexp",
+              "options": "/.* failure/"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "fixedColor": "red",
+                  "mode": "fixed"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 8,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "hidden",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance)(probe_http_status_code{job=\"kubernetes-ingresses\",instance=~\"$Endpoint\"}) == 200",
+          "hide": false,
+          "legendFormat": "{{instance}} success",
+          "range": true,
+          "refId": "Success"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "expr": "sum by (instance)(probe_http_status_code{job=\"kubernetes-ingresses\",instance=~\"$Endpoint\"}) != 200",
+          "hide": false,
+          "legendFormat": "{{instance}} failure",
+          "range": true,
+          "refId": "Failure"
+        }
+      ],
+      "title": "$Endpoint status code",
+      "transparent": true,
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "observa-prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "probe duration"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "s"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "cert expire days"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "availability % (7d)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "percent"
+              },
+              {
+                "id": "decimals",
+                "value": 3
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 12,
+        "w": 8,
+        "x": 16,
+        "y": 0
+      },
+      "id": 6,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": [
+          {
+            "desc": true,
+            "displayName": "probe duration"
+          }
+        ]
+      },
+      "pluginVersion": "8.5.0-56035pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (instance,namespace)(probe_http_status_code{job=\"kubernetes-ingresses\",instance=~\".*\"})",
+          "format": "table",
+          "instant": true,
+          "interval": "",
+          "range": false,
+          "refId": "status code"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (instance,namespace)(probe_duration_seconds{job=\"kubernetes-ingresses\",instance=~\".*\"})",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "range": false,
+          "refId": "probe duration"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "(sum by (instance,namespace)(probe_ssl_earliest_cert_expiry{job=\"kubernetes-ingresses\",instance=~\".*\"}) - time()) / 86400",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "cert expire days"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "observa-prometheus"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "sum by (instance,namespace)(avg_over_time(probe_success{job=\"kubernetes-ingresses\",instance=~\".*\"}[7d])) * 100",
+          "format": "table",
+          "hide": false,
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "availability % (7d)"
+        }
+      ],
+      "title": "Ingress endpoints state",
+      "transformations": [
+        {
+          "id": "merge",
+          "options": {}
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "Time": true
+            },
+            "indexByName": {
+              "Time": 0,
+              "Value #cert expire days": 5,
+              "Value #probe duration": 4,
+              "Value #status code": 3,
+              "instance": 2,
+              "namespace": 1
+            },
+            "renameByName": {
+              "Value #availability": "availability",
+              "Value #availability over 7 days": "availability % (7d)",
+              "Value #cert expire days": "cert expire days",
+              "Value #probe duration": "probe duration",
+              "Value #status code": "status code"
+            }
+          }
+        }
+      ],
+      "transparent": true,
+      "type": "table"
+    }
+  ],
+  "refresh": false,
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": true,
+          "text": "observa",
+          "value": "observa"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "observa-prometheus"
+        },
+        "definition": "label_values({job=\"kubernetes-ingresses\"},namespace)",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "Namespace",
+        "options": [],
+        "query": {
+          "query": "label_values({job=\"kubernetes-ingresses\"},namespace)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      },
+      {
+        "allValue": ".*",
+        "current": {
+          "selected": false,
+          "text": "http://default/",
+          "value": "http://default/"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "observa-prometheus"
+        },
+        "definition": "label_values({namespace=~\"$Namespace\",job=\"kubernetes-ingresses\"},instance)",
+        "hide": 0,
+        "includeAll": false,
+        "multi": false,
+        "name": "Endpoint",
+        "options": [],
+        "query": {
+          "query": "label_values({namespace=~\"$Namespace\",job=\"kubernetes-ingresses\"},instance)",
+          "refId": "StandardVariableQuery"
+        },
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 0,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "HTTP",
+  "uid": "r8JKvPUnz",
+  "version": 53,
+  "weekStart": ""
+}

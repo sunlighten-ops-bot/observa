@@ -45,18 +45,6 @@ data:
             action: keep
             regex: default;kubernetes;https
 
-      - job_name: "kubernetes-nodes"
-        scheme: https
-        tls_config:
-          ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-        authorization:
-          credentials_file: /var/run/secrets/kubernetes.io/serviceaccount/token
-        kubernetes_sd_configs:
-          - role: node
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_node_label_(.+)
-
       - job_name: "kubernetes-cadvisor"
         metrics_path: /metrics/cadvisor
         scheme: https
@@ -71,32 +59,6 @@ data:
           regex: __meta_kubernetes_node_label_(.+)
           replacement: $1
           action: labelmap
-
-      - job_name: "kubernetes-endpoints"
-        honor_labels: true
-        kubernetes_sd_configs:
-          - role: endpoints
-        relabel_configs:
-          - action: labelmap
-            regex: __meta_kubernetes_service_label_(.+)
-          - source_labels: [__meta_kubernetes_namespace]
-            action: replace
-            target_label: namespace
-          - source_labels: [__meta_kubernetes_service_name]
-            action: replace
-            target_label: service
-          - action: labelkeep
-            regex: ".*"
-        metric_relabel_configs:
-          - source_labels: [__name__, exported_pod]
-            regex: "kube_pod_info;(.+)"
-            target_label: pod
-          - source_labels: [__name__, exported_namespace]
-            regex: "kube_pod_info;(.+)"
-            target_label: namespace
-          - source_labels: [__name__, exported_node]
-            regex: "kube_pod_info;(.+)"
-            target_label: node
 
       - job_name: "kubernetes-pods"
         honor_labels: true
@@ -121,3 +83,54 @@ data:
           - source_labels: [__name__, exported_node]
             regex: "kube_pod_info;(.+)"
             target_label: node
+
+      - job_name: "kubernetes-services"
+        metrics_path: /probe
+        params:
+          module: [http_2xx]
+        kubernetes_sd_configs:
+          - role: service
+        relabel_configs:
+        # As there might be too many services which not important to probe, only services with "blackbox/should_be_probed = true" annotation will be probed.
+          - source_labels: [__meta_kubernetes_service_annotation_blackbox_should_be_probed]
+            action: keep
+            regex: true
+          - source_labels: [__address__]
+            target_label: __param_target
+          - target_label: __address__
+            replacement: blackbox-exporter:9115
+          - source_labels: [__param_target]
+            target_label: instance
+          - action: labelmap
+            regex: __meta_kubernetes_service_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+          - source_labels: [__meta_kubernetes_service_name]
+            target_label: service
+
+      - job_name: "kubernetes-ingresses"
+        metrics_path: /probe
+        params:
+          module: [http_2xx]
+        kubernetes_sd_configs:
+          - role: ingress
+        relabel_configs:
+          - source_labels:
+              [
+                __meta_kubernetes_ingress_scheme,
+                __address__,
+                __meta_kubernetes_ingress_path,
+              ]
+            regex: (.+);(.+);(.+)
+            replacement: ${1}://${2}${3}
+            target_label: __param_target
+          - target_label: __address__
+            replacement: blackbox-exporter:9115
+          - source_labels: [__param_target]
+            target_label: instance
+          - action: labelmap
+            regex: __meta_kubernetes_ingress_label_(.+)
+          - source_labels: [__meta_kubernetes_namespace]
+            target_label: namespace
+          - source_labels: [__meta_kubernetes_ingress_name]
+            target_label: ingress

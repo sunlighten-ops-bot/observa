@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: blackbox-exporter
+  namespace: observa
+  labels:
+    app: blackbox-exporter
+spec:
+  ports:
+    - name: http
+      port: 9115
+      protocol: TCP
+      targetPort: 9115
+  selector:
+    app: blackbox-exporter

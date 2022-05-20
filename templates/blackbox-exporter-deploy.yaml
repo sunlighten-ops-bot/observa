@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blackbox-exporter
+  namespace: observa
+  labels:
+    app: blackbox-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blackbox-exporter
+  template:
+    metadata:
+      labels:
+        app: blackbox-exporter
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/blackbox-exporter-cm.yaml") . | sha256sum }}
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: blackbox-exporter
+        image: {{ .Values.blackbox_exporter.image }}
+        imagePullPolicy: IfNotPresent
+        args:
+          - --config.file=/etc/blackbox-exporter/blackbox.yaml
+        ports:
+          - containerPort: 9115
+        readinessProbe:
+          tcpSocket:
+            port: 9115
+          initialDelaySeconds: 5
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: {{ .Values.blackbox_exporter.cpuReq }}
+            memory: {{ .Values.blackbox_exporter.memReq }}
+          limits:
+            cpu: {{ .Values.blackbox_exporter.cpuLim }}
+            memory: {{ .Values.blackbox_exporter.memLim }}
+        volumeMounts:
+          - name: config
+            mountPath: /etc/blackbox-exporter
+      volumes:
+        - name: config
+          configMap:
+            name: blackbox-exporter

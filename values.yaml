@@ -5,6 +5,7 @@ alertmanager:
   memReq: 1Gi
   memLim: 4Gi
   storage: 1Gi
+  storageClassName: default
   
 promtail:
   image: grafana/promtail:main
@@ -20,6 +21,8 @@ loki:
   memReq: 1Gi
   memLim: 4Gi
   storage: 10Gi
+  retentionTime: 24h
+  storageClassName: default
 
 prometheus:
   image: prom/prometheus:main
@@ -30,6 +33,7 @@ prometheus:
   storage: 10Gi
   retentionTime: 14d
   retentionSize: 8GB
+  storageClassName: default
 
 node_exporter:
   image: prom/node-exporter
@@ -38,6 +42,13 @@ node_exporter:
   memReq: 1Gi
   memLim: 4Gi
 
+blackbox_exporter:
+  image: prom/blackbox-exporter:v0.20.0
+  cpuReq: 250m
+  cpuLim: 500m
+  memReq: 1Gi
+  memLim: 4Gi
+  
 grafana:
   host: observa.az
   image: grafana/grafana:main
@@ -46,3 +57,4 @@ grafana:
   memReq: 1Gi
   memLim: 4Gi
   storage: 10Gi
+  storageClassName: default

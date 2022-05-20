@@ -15,6 +15,8 @@ spec:
       labels:
         app: promtail
         kubernetes.io/cluster-service: "true"
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/promtail-cm.yaml") . | sha256sum }}
     spec:
       containers:
       - name: promtail
